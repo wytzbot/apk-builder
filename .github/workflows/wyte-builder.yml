@@ -1,32 +1,33 @@
 name: Wyte APK Builder
-on: workflow_dispatch
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      
-      - uses: actions/setup-node@v4
-        with: {node-version: '20'}
-        
-      - run: npm i -g @capacitor/cli
-      
-      - name: Init Capacitor Project
-        run: npx cap init "Wyte Hub" "com.wyte.hub" --web-dir=www
-      
-      - name: Create index.html with Menu
-        run: |
-          mkdir -p www
-          printf '%s' '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{background:#0a0a0a;color:#fff;font-family:Arial;text-align:center;padding:40px}h1{color:#00ff88;font-size:28px}.btn{display:block;background:#00ff88;color:#000;padding:20px;margin:15px;border-radius:15px;text-decoration:none;font-weight:bold;font-size:18px}</style></head><body><h1>🚀 WYTE HUB</h1><a class="btn" href="https://wytzbot.github.io/wyedit">WyEdit</a><a class="btn" href="https://google.com">ToluNote</a><a class="btn" href="https://google.com">Other App</a></body></html>' > www/index.html
-      
-      - name: Add Android
-        run: npx cap add android
-      
-      - name: Build Release APK
-        run: cd android && chmod +x gradlew && ./gradlew assembleRelease
-      
-      - uses: actions/upload-artifact@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
         with:
-          name: WyteHub-APK
-          path: android/app/build/outputs/apk/release/app-release.apk
+          distribution: temurin
+          java-version: '17'
+
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: wyte-apk
+          path: app/build/outputs/apk/debug/*.apk
