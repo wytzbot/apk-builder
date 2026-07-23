@@ -23,17 +23,18 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
-      - name: Install PWABuilder
-        run: npm install -g @pwabuilder/pwabuilder-cli
+      - name: Install Bubblewrap
+        run: npm install -g @bubblewrap/cli
 
       - name: Generate APK
         run: |
-          pwabuilder ${{ inputs.app_url }} --platform android --name "${{ inputs.app_name }}"
+          bubblewrap init --manifest="${{ inputs.app_url }}/manifest.json" --directory=./app
+          bubblewrap build --directory=./app
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.app_name }}.apk
-          path: ./dist/*.apk
+          path: ./app/*.apk
