@@ -10,6 +10,8 @@
   <style>
     .gradient-bg { background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); }
     .glass { backdrop-filter: blur(16px); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); }
+    @keyframes fadeIn { from {opacity:0; transform:translateY(10px)} to {opacity:1; transform:translateY(0)} }
+    .animate-fadeIn { animation: fadeIn 0.5s ease; }
   </style>
 </head>
 <body class="gradient-bg text-white min-h-screen">
@@ -27,6 +29,15 @@
 
     <!-- Dashboard -->
     <div id="dashboard" class="hidden w-full max-w-3xl">
+      <!-- SETTINGS -->
+      <div class="glass p-6 rounded-2xl mb-6">
+        <h3 class="text-lg font-semibold mb-3">⚙️ Settings</h3>
+        <p class="text-sm text-gray-400 mb-2">Paste your GitHub PAT. Saved in browser only.</p>
+        <input id="tokenInput" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full p-3 rounded-lg bg-gray-900 text-white mb-3 outline-none focus:ring-2 focus:ring-indigo-600">
+        <button onclick="saveToken()" class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg font-semibold">Save Token</button>
+      </div>
+
+      <!-- USER INFO -->
       <div class="glass p-6 rounded-2xl mb-6 flex items-center gap-4">
         <img id="avatar" class="w-14 h-14 rounded-full">
         <div>
@@ -35,11 +46,12 @@
         </div>
       </div>
       
+      <!-- BUILD FORM -->
       <div class="glass p-8 rounded-2xl">
         <h3 class="text-2xl font-semibold mb-4">New APK Build</h3>
         <input id="appName" type="text" placeholder="App Name e.g MyApp" class="w-full p-3 rounded-lg bg-gray-900 text-white mb-3 outline-none focus:ring-2 focus:ring-indigo-600">
         <input id="url" type="text" placeholder="https://example.com" class="w-full p-3 rounded-lg bg-gray-900 text-white mb-4 outline-none focus:ring-2 focus:ring-indigo-600">
-        <button id="buildBtn" onclick="triggerBuild()" class="w-full bg-green-600 hover:bg-green-500 px-6 py-4 rounded-xl font-bold text-lg transition">Generate APK</button>
+        <button id="buildBtn" onclick="triggerBuild()" class="w-full bg-green-600 hover:bg-green-500 px-6 py-4 rounded-xl font-bold text-lg transition disabled:opacity-50">Generate APK</button>
         <p class="text-xs text-gray-400 mt-3">Build takes 2-3 mins. Download from Actions tab.</p>
       </div>
     </div>
@@ -48,4 +60,4 @@
 
 <script type="module" src="app.js"></script>
 </body>
-</html>
+        </html>
