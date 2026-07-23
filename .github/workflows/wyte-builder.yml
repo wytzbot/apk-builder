@@ -1,31 +1,39 @@
-name: Build APK from URL
-on: workflow_dispatch
-  inputs:
-    app_url:
-      description: 'The website URL to convert'
-      required: true
-    app_name:
-      description: 'App Name'
-      required: true
+name: Wyte URL to APK Builder
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_url:
+        description: 'Website URL to convert'
+        required: true
+        type: string
+      app_name:
+        description: 'App Name'
+        required: true
+        type: string
 
 jobs:
-  build:
+  build-apk:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: {node-version: '20'}
-      - run: npm i -g @capacitor/cli
-      
-      - name: Create App
-        run: |
-          npx cap init "${{ inputs.app_name }}" "com.wyte.${{ inputs.app_name }}" --web-dir=www
-          mkdir www
-          printf '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0}</style></head><body><script>location.replace("%s")</script></body></html>' "${{ inputs.app_url }}" > www/index.html
-      
-      - run: npx cap add android
-      - run: cd android && chmod +x gradlew && ./gradlew assembleRelease
-      - uses: actions/upload-artifact@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          name: ${{ inputs.app_name }}-APK
-          path: android/app/build/outputs/apk/release/app-release.apk
+          node-version: '18'
+
+      - name: Install PWABuilder
+        run: npm install -g @pwabuilder/pwabuilder-cli
+
+      - name: Generate APK
+        run: |
+          pwabuilder ${{ inputs.app_url }} --platform android --name "${{ inputs.app_name }}"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.app_name }}.apk
+          path: ./dist/*.apk
