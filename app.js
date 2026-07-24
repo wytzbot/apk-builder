@@ -136,7 +136,7 @@ async function exchangeCodeForToken(code) {
   showToast("Exchanging OAuth code...", "info");
   
   // Real deployment demands a secure backend gateway to prevent client_secret leakage
-  const gatewayUrl = "/api/github-token-exchange"; 
+  const gatewayUrl = "/api/oauth/exchange"; 
   
   try {
     const response = await fetch(gatewayUrl, {
