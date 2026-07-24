@@ -1,5 +1,4 @@
 name: Wyte APK Builder
-
 on:
   workflow_dispatch:
     inputs:
