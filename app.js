@@ -5,7 +5,7 @@
 
 // --- CONFIGURATION ---
 // Replace with your registered GitHub OAuth Application Client ID
-const CLIENT_ID = "YOUR_GITHUB_CLIENT_ID"; 
+const CLIENT_ID = "Ov23ligGzK8hLcmDEbf5"; 
 const REDIRECT_URI = window.location.origin + window.location.pathname;
 
 // --- STATE MANAGEMENT ---
